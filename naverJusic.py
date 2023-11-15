@@ -246,13 +246,15 @@ class jusikplay(QWidget):
 
                 table = soup.find('table', class_='type_2')
 
-                data = []
+                data = [] # 엑셀에 입력할 데이터를 담을 빈 리스트
                 
-                # table 에서 TR 만 전부 가져와 FOR 문을 돌고 그 안에서 또 TD 만 다 가져와서 필요한 값만 공백제거하고 DATA에 넣는다
+                # table 에서 TR 만 전부 가져와 FOR 문을 돌고 그 안에서 또 TD 만 다 가져와서 필요한 값만 공백제거하고 DATA에 넣는다  
                 for row in table.find_all('tr'):
-                    for col in row.find_all('td'):
-                        if col:
-                            data.append(col.text.strip())
+                    cols = [col.text.strip() for col in row.find_all('td')]
+                    if cols: # 열데이터 공백 여부 확인 후 넣기.
+                        data.append(cols)            
+                            
+                            
                             
                 # 엑셀에 데이터 넣기
                 tempDf = pd.DataFrame(data, columns=resultDf.columns)
